@@ -1,0 +1,74 @@
+*{
+    margin: 0 0;
+    padding: 0;
+}
+html{
+    background-color: rgb(252, 252, 252);  
+}
+body{
+        font-family: 'Press Start 2P', sans-serif;
+        font-size: 62.5%;
+        color: #eee;
+        padding: 10px;
+}
+#calender__content{
+    position:relative;
+    background-image:url(../img/summer.jpg) ;
+    background-size:cover;
+    height:96vh;
+}
+#calender_header{
+    position:absolute;
+    z-index: 2;
+    top:20%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}
+#header__month{
+    font-size: 5rem;
+    font-weight: 900;
+    letter-spacing: -0.4rem;
+    text-transform: uppercase;
+}
+#header__month__day{
+    position:absolute;
+    z-index: 0;
+    font-weight: 700;
+    font-size: 12rem;
+    letter-spacing: -0.4rem;
+    top:-50%;
+    left:40%;
+    color: rgba(224, 224, 224, 0.5);
+    text-align: right;
+}
+#calender__days{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    width: 80rem;
+    /* height: 35rem; */
+    top:30%;
+    left:50%;
+    transform: translate(-50%,0%);
+    box-shadow: 0 0 1rem 0 rgba(153, 153, 153, 0.2);
+    backdrop-filter: blur(5px);
+}
+.day{
+    order: 0;
+    flex: 0 1 auto;
+    align-self: auto;
+    height: 18vh;
+    width: 18vh;
+    text-align: center;
+}
+.day--head{
+    font-size: 4rem;
+}
+.today{
+    background-color: seashell;
+}
