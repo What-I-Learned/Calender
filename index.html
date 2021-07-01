@@ -1,32 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Just a simple calender to see your daily tasks</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <main id="calender__content">
-        <header id ="calender_header">
-            <span id="header__month__day">12</span>
-            <h1 id ="header__month">August</h1>
-            
-        </header>
-        <div id="calender__days">
+      <header id="calender_header">
+        <span id="header__month__day">12</span>
+        <h1 id="header__month">August</h1>
+      </header>
+      <div id="calender__days"></div>
+      <div id="schedule__content">
+        <header id="schedule_header"></header>
+        <div id="meeting-creation">
+          <input type="time" id="meeting-time" value="9:00" />
+          <input
+            type="text"
+            id="meeting-description"
+            placeholder="insert description"
+          />
+          <button type="button" value="Create">
+            <h4>Add task</h4>
+            <span id="btn--add_task">+</span>
+          </button>
         </div>
-        <div id="schedule__content">
-            <header id="schedule_header"></header>
-            <button type ="button"><h4>Add task</h4><span id="btn--add_task">+</span></button>
-            <div id="schedule__items">
-                <div class="task">
-                    <div class ="time"></div>
-                    <div class = "task__description"></div>
-                </div>
-            </div>
+
+        <div id="schedule__items">
+          <div class="task">
+            <div class="time"></div>
+            <div class="task__description"></div>
+          </div>
         </div>
+      </div>
     </main>
-</body>
+  </body>
 </html>
