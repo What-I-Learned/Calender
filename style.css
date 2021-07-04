@@ -1,75 +1,52 @@
 * {
-  margin: 0 0;
+  margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 
 }
+
 html {
-  background-color: rgb(252, 252, 252);
-}
-body {
-  font-family: "Press Start 2P", sans-serif;
   font-size: 62.5%;
-  color: #eee;
-  padding: 10px;
+  color: #0c0c08;
 }
-#calender__content {
-  position: relative;
-  background-image: url(../img/summer.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 96vh;
+#main__container {
+  width: 100%;
+  height: 100vh;
+  background-color: #ecebe1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-#calender_header {
-  position: absolute;
-  z-index: 2;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+#calander__container {
+  width: 70rem;
+  height: 60rem;
 }
-#header__month {
-  font-size: 5rem;
-  font-weight: 900;
-  letter-spacing: -0.4rem;
-  text-transform: uppercase;
-}
-#header__month__day {
-  position: absolute;
-  z-index: 0;
-  font-weight: 700;
-  font-size: 12rem;
-  letter-spacing: -0.4rem;
-  top: -50%;
-  left: 40%;
-  color: rgba(224, 224, 224, 0.5);
-  text-align: right;
-}
-#calender__days {
+#week-days {
+  width: 100%;
+  height: 5rem;
+  padding: 0 0.4rem;
   display: flex;
   flex-direction: row;
+  align-content: space-around;
+  align-items: center;
+}
+.week__day {
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0rem;
+  text-transform: uppercase;
+  width: calc(69.2rem / 7);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+#month-container {
+  width: 100%;
+  border: 1px solid #0c0c08;
+  display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-content: flex-start;
-  align-items: flex-start;
-  position: relative;
-  width: 700px;
-  height: 500px;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, 0%);
-  box-shadow: 0 0 1rem 0 rgba(153, 153, 153, 0.2);
-  backdrop-filter: blur(5px);
+  padding: 0.2rem;
 }
 .day {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-  height: 100px;
-  width: 100px;
-  text-align: center;
-}
-.day--head {
-  font-size: 4rem;
-}
-.today {
-  background-color: seashell;
+  font-size: 1.8rem;
 }
