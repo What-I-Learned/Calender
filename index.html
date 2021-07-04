@@ -12,9 +12,9 @@
     <main id="main__container">
       <div id="calander__container">
         <div id="calander__title">
-          <h3 id="day"></h3>
-          <h2 id="month"></h2>
-          <h3 id="year"></h3>
+          <h3 class="title title-month">July</h3>
+          <h2 class="title title-day">04</h2>
+          <h3 class="title title-year">2021</h3>
         </div>
         <div id="week-days">
           <div class="week__day">Mon</div>
@@ -26,6 +26,17 @@
           <div class="week__day">Sun</div>
         </div>
         <div id="month-container">
+          <div class="day place-holder"></div>
+          <div class="day">01</div>
+          <div class="day today">
+            02 <span class="tasks"><p>5</p></span>
+          </div>
+          <div class="day">1</div>
+          <div class="day">1</div>
+          <div class="day">1</div>
+          <div class="day">
+            1<span class="tasks"><p>5</p></span>
+          </div>
           <div class="day">1</div>
           <div class="day">1</div>
           <div class="day">1</div>
@@ -62,6 +73,7 @@
           <div class="day">1</div>
           <div class="day">1</div>
         </div>
+        <div id="tasks__container"></div>
       </div>
     </main>
   </body>
