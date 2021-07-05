@@ -3,6 +3,10 @@ const date = new Date();
 const year = date.getUTCFullYear();
 const month = date.getUTCMonth();
 const day = date.getUTCDate();
+const weekDay = date.getUTCDay();
+const firstDay = new Date(year, month, 1).getDay();
+console.log(weekDay);
+console.log("hello", firstDay);
 
 //--arrays
 let months = [
@@ -30,30 +34,41 @@ let days = [
   "Sunday",
 ];
 
+//-- Make day object
 let dayObj = {
   id: day,
-  //tasks:[],
+  tasks: [],
   today: false,
   monthName: months[month],
-  //dayName:String,
 };
 
+function createDayObj(id, bool) {
+  let newDay = Object.assign({}, dayObj);
+  newDay.id = id;
+  newDay.today = bool;
+  newDay.monthName = months[month];
+  // newDay.tasks = tasks;
+
+  return newDay;
+}
+
+//-- make task object
 let taskObj = {
-  time: Number,
+  time: String,
   description: String,
 };
 
-function monthAndDay() {
-  const monthContent = document.getElementById("header__month");
-  const dayContent = document.getElementById("header__month__day");
-  monthContent.innerText = months[month];
-  dayContent.innerText = day.toString();
+function createTaskObj(time, description) {
+  let newTask = Object.assign({}, taskObj);
+  newTask.time = time;
+  newTask.description = description;
+
+  return newTask;
 }
 
+//-- check how many days in a month
 function calenderDays() {
-  //const calenderDays = document.getElementById("schedule_items")
-  let lenghtOftheMonth = new Date(year, month + 1, 0).getDate();
-  console.log(lenghtOftheMonth);
+  let lenghtOftheMonth = new Date(year, month, 0).getDate();
   let daysOfTheMonth = [];
   for (let i = 0; i <= lenghtOftheMonth; i++) {
     daysOfTheMonth[i] = i;
@@ -61,76 +76,185 @@ function calenderDays() {
   return daysOfTheMonth;
 }
 
-//-- Make day object
-function createDayObj(id, bool) {
-  let newDay = Object.assign({}, dayObj);
-  newDay.id = id;
-  newDay.today = bool;
-  //newDay.tasks = tasks,
-  return newDay;
-}
-
-//-- Create
-
-// -- do days of the month array
-function fillDays() {
-  let daysArray = calenderDays();
+//-- create day objects Array
+function createDaysArray() {
+  let daysAmountArray = calenderDays();
   createDayObj();
-  let actualDaysObj = [];
-  for (let dayIndex of daysArray) {
+  for (let dayIndex of daysAmountArray) {
     let bool = dayIndex == day ? true : false;
-    let newDay = createDayObj(daysArray[dayIndex], bool);
-    actualDaysObj.push(newDay);
+    let newDay = createDayObj(daysAmountArray[dayIndex], bool);
+    daysAmountArray[dayIndex] = newDay;
   }
-  actualDaysObj.shift();
-  console.log(actualDaysObj);
-  return actualDaysObj;
+  daysAmountArray.shift();
+  return daysAmountArray;
 }
 
-// --append days
-function appendDays() {
-  let calenderDays = document.getElementById("calender__days");
-  console.log(calenderDays);
+//-- set UI date header
+function setUiDate() {
+  //-- select UI elements
 
-  let days = fillDays();
+  const uiMonth = document.querySelector(".title-month");
+  const uiDay = document.querySelector(".title-day");
+  const uiYear = document.querySelector(".title-year");
 
-  for (let d = 0; d < days.length; d++) {
-    //-- main div
+  //-- set conten
+  uiMonth.innerText = months[month];
+  uiDay.innerText = day < 10 ? `0${day.toString()}` : day.toString();
+  uiYear.innerText = year.toString();
+}
+
+//-- create days on the UI calender
+function createDayUiContainers() {
+  const calenderDays = document.getElementById("month-container");
+  let dayObjContainer = createDaysArray();
+  let divArr = [];
+  let startOfTheMonth = firstDay;
+  for (let d = 0; d < dayObjContainer.length + firstDay; d++) {
     const divNode = document.createElement("div");
     divNode.classList.add(`day`);
-    divNode.classList.add(`day--${days[d].id}`);
-    divNode.onclick = selectDay;
-
-    //-- day text
-    const h4 = document.createElement("h4");
-    h4.classList.add("day--head");
-    h4.textContent = days[d].id.toString();
-    divNode.append(h4);
-
-    //-- check if today
-    if (days[d].today == true) {
-      divNode.classList.add("today");
-    }
-    //-- append days
     calenderDays.appendChild(divNode);
+
+    //-- manage placeholders
+    if (d < startOfTheMonth) {
+      divNode.classList.add(`place-holder`);
+    }
+
+    //-- add days (maybe function)
+    if (d >= startOfTheMonth) {
+      divNode.innerText =
+        dayObjContainer[d - startOfTheMonth].id < 10
+          ? `0${dayObjContainer[d - startOfTheMonth].id}`
+          : dayObjContainer[d - startOfTheMonth].id;
+      //-- add tasks span if there are any tasks
+    }
+
+    //-- add class today
+    if (
+      d >= startOfTheMonth &&
+      dayObjContainer[d - startOfTheMonth].today === true
+    ) {
+      divNode.classList.add(`today`);
+      divNode.classList.add(`selected`);
+    }
+
+    divArr.push(divNode);
   }
-  console.log(...divsArray);
+  return divArr;
 }
 
-function selectDay(event) {
-  //-- deselect the currenctly selected dayObj
-  const currenctlySelectedDayNode = document.querySelector(".today");
+// // -- do days of the month array
+// function selectDay(event) {
+//   //-- deselect the currenctly selected dayObj
+//   const currenctlySelectedDayNode = document.querySelector(".selected");
 
-  if (currenctlySelectedDayNode !== null)
-    currenctlySelectedDayNode.classList.remove("today");
+//   if (currenctlySelectedDayNode !== null)
+//     currenctlySelectedDayNode.classList.remove("selected");
 
-  //-- select day that has just been clicked
-  const clickedDayNode = event.currentTarget;
-  clickedDayNode.classList.add("today");
+//   //-- select day that has just been clicked
+//   const clickedDayNode = event.currentTarget;
+//   clickedDayNode.classList.add("selected");
+// }
+
+///////////////////////////////////////////////////////////////////////
+
+//-- create schedule ui elements
+function createTask() {
+  const taskDescription = document.getElementById("create-task");
+  const taskTime = document.getElementById("taskTime");
+  const addBtn = document.getElementById("add");
+
+  //-- add schedule
+  let scheduleForTheDay = getSelectedDaySchedule();
+
+  addBtn.addEventListener("click", function () {
+    if (!taskTime.value == null || taskDescription.value) {
+      scheduleForTheDay.push(
+        createTaskObj(taskTime.value, taskDescription.value)
+      );
+      displaySchedule();
+      // refresh schedule for new tasks
+    } else {
+      console.log("working");
+      taskDescription.placeholder = "you forgot to write your task";
+    }
+  });
+
+  console.log(scheduleForTheDay);
 }
+//-- push with id of the selected day(original selected is today)
+//
+
+//-- select a dayObj
+function getCurrentlySelectedDay() {
+  // console.log(document.querySelector(".selected"));
+  return document.querySelector(".selected");
+}
+
+//-- check which one is selected day
+function getSelectedDaySchedule() {
+  let currentlySelectedDayNode = getCurrentlySelectedDay();
+  let selectedDayId = +currentlySelectedDayNode.innerText;
+
+  //-- get the array of days with id and schedule
+  let scheduleOftheDay = createDaysArray()[selectedDayId - 1].tasks;
+  //-- no tasks?
+  if (scheduleOftheDay.length == 0) {
+    scheduleOftheDay = [];
+  }
+
+  return scheduleOftheDay;
+}
+
+//-- display schedule for a selected dayObj
+function displaySchedule() {
+  //-- get schedule of selected day
+  let schedule = getSelectedDaySchedule();
+
+  //-- select container
+  const taskList = document.getElementById("task-list");
+
+  //-- if empty schedule
+  if (taskList == undefined || taskList.length == 0) {
+    let taskDiv = document.createElement("div");
+    let descriptionDiv = document.createElement("p");
+    taskDiv.classList.add("task");
+    descriptionDiv.classList.add("task-description");
+
+    descriptionDiv.innerText = "There are no tasks for today";
+
+    taskList.append(taskDiv);
+    taskDiv.appendChild(descriptionDiv);
+  }
+
+  for (let task of schedule) {
+    //-- create divs
+    let taskDiv = document.createElement("div");
+    let timeDiv = document.createElement("span");
+    let descriptionDiv = document.createElement("p");
+
+    //-- add classess
+    taskDiv.classList.add("task");
+    timeDiv.classList.add("time");
+    descriptionDiv.classList.add("task-description");
+
+    //-- div content
+    timeDiv.innerText = task.time;
+    descriptionDiv.innerText = task.description;
+
+    //-- appendChild
+    taskList.append(taskDiv);
+    taskDiv.append(timeDiv);
+    taskDiv.append(descriptionDiv);
+  }
+}
+
+//-- add to the meeting object
+// let new
 
 window.onload = function () {
-  monthAndDay();
-  //fillDays()
-  appendDays();
+  setUiDate();
+  createDayUiContainers();
+
+  getSelectedDaySchedule();
+  createTask();
 };
