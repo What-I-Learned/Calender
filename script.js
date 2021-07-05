@@ -211,7 +211,7 @@ function displaySchedule() {
   let schedule = getSelectedDaySchedule();
 
   //-- select container
-  const taskList = document.getElementById("task-list");
+  let taskList = document.getElementById("task-list");
 
   //-- if empty schedule
   if (taskList == undefined || taskList.length == 0) {
@@ -222,7 +222,7 @@ function displaySchedule() {
 
     descriptionDiv.innerText = "There are no tasks for today";
 
-    taskList.append(taskDiv);
+    taskList.appendChild(taskDiv);
     taskDiv.appendChild(descriptionDiv);
   }
 
@@ -242,9 +242,9 @@ function displaySchedule() {
     descriptionDiv.innerText = task.description;
 
     //-- appendChild
-    taskList.append(taskDiv);
-    taskDiv.append(timeDiv);
-    taskDiv.append(descriptionDiv);
+    taskList.appendChild(taskDiv);
+    taskDiv.appendChild(timeDiv);
+    taskDiv.appendChild(descriptionDiv);
   }
 }
 
@@ -254,7 +254,7 @@ function displaySchedule() {
 window.onload = function () {
   setUiDate();
   createDayUiContainers();
-
+  displaySchedule();
   getSelectedDaySchedule();
   createTask();
 };
