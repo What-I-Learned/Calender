@@ -42,12 +42,12 @@ let dayObj = {
   monthName: months[month],
 };
 
-function createDayObj(id, bool) {
+function createDayObj(id, bool, tasks) {
   let newDay = Object.assign({}, dayObj);
   newDay.id = id;
   newDay.today = bool;
   newDay.monthName = months[month];
-  // newDay.tasks = tasks;
+  newDay.tasks = tasks;
 
   return newDay;
 }
@@ -82,7 +82,8 @@ function createDaysArray() {
   createDayObj();
   for (let dayIndex of daysAmountArray) {
     let bool = dayIndex == day ? true : false;
-    let newDay = createDayObj(daysAmountArray[dayIndex], bool);
+    let tasks = [];
+    let newDay = createDayObj(daysAmountArray[dayIndex], bool, tasks);
     daysAmountArray[dayIndex] = newDay;
   }
   daysAmountArray.shift();
@@ -163,14 +164,17 @@ function createTask() {
   const taskTime = document.getElementById("taskTime");
   const addBtn = document.getElementById("add");
 
+  taskDescription.placeholder = "write your task";
+
   //-- add schedule
   let scheduleForTheDay = getSelectedDaySchedule();
 
   addBtn.addEventListener("click", function () {
-    if (!taskTime.value == null || taskDescription.value) {
-      scheduleForTheDay.push(
-        createTaskObj(taskTime.value, taskDescription.value)
-      );
+    let dayTask = createTaskObj(taskTime.value, taskDescription.value);
+    if (taskDescription.value !== "") {
+      scheduleForTheDay.push(dayTask);
+      console.log(scheduleForTheDay);
+      console.log(createDaysArray());
       displaySchedule();
       // refresh schedule for new tasks
     } else {
@@ -178,8 +182,6 @@ function createTask() {
       taskDescription.placeholder = "you forgot to write your task";
     }
   });
-
-  console.log(scheduleForTheDay);
 }
 //-- push with id of the selected day(original selected is today)
 //
@@ -197,6 +199,8 @@ function getSelectedDaySchedule() {
 
   //-- get the array of days with id and schedule
   let scheduleOftheDay = createDaysArray()[selectedDayId - 1].tasks;
+  scheduleOftheDay = [1, 2, 4, 5, 6, 7, 8];
+
   //-- no tasks?
   if (scheduleOftheDay.length == 0) {
     scheduleOftheDay = [];
@@ -209,6 +213,7 @@ function getSelectedDaySchedule() {
 function displaySchedule() {
   //-- get schedule of selected day
   let schedule = getSelectedDaySchedule();
+  console.log(schedule);
 
   //-- select container
   let taskList = document.getElementById("task-list");
