@@ -38,32 +38,16 @@ let days = [
 let dayObj = {
   id: day,
   tasks: [],
-  today: false,
   monthName: months[month],
 };
 
-function createDayObj(id, bool, tasks) {
+function createDayObj(id, bool) {
   let newDay = Object.assign({}, dayObj);
   newDay.id = id;
   newDay.today = bool;
   newDay.monthName = months[month];
-  newDay.tasks = tasks;
 
   return newDay;
-}
-
-//-- make task object
-let taskObj = {
-  time: String,
-  description: String,
-};
-
-function createTaskObj(time, description) {
-  let newTask = Object.assign({}, taskObj);
-  newTask.time = time;
-  newTask.description = description;
-
-  return newTask;
 }
 
 //-- check how many days in a month
@@ -73,22 +57,24 @@ function calenderDays() {
   for (let i = 0; i <= lenghtOftheMonth; i++) {
     daysOfTheMonth[i] = i;
   }
+  console.log(daysOfTheMonth);
   return daysOfTheMonth;
 }
 
 //-- create day objects Array
 function createDaysArray() {
   let daysAmountArray = calenderDays();
-  createDayObj();
   for (let dayIndex of daysAmountArray) {
     let bool = dayIndex == day ? true : false;
     let tasks = [];
     let newDay = createDayObj(daysAmountArray[dayIndex], bool, tasks);
     daysAmountArray[dayIndex] = newDay;
   }
-  daysAmountArray.shift();
   return daysAmountArray;
 }
+
+let daysAndMeetings = createDaysArray();
+console.log(daysAndMeetings);
 
 //-- set UI date header
 function setUiDate() {
@@ -98,7 +84,7 @@ function setUiDate() {
   const uiDay = document.querySelector(".title-day");
   const uiYear = document.querySelector(".title-year");
 
-  //-- set conten
+  //-- set content
   uiMonth.innerText = months[month];
   uiDay.innerText = day < 10 ? `0${day.toString()}` : day.toString();
   uiYear.innerText = year.toString();
@@ -107,10 +93,10 @@ function setUiDate() {
 //-- create days on the UI calender
 function createDayUiContainers() {
   const calenderDays = document.getElementById("month-container");
-  let dayObjContainer = createDaysArray();
+  let dayObjContainer = daysAndMeetings;
   let divArr = [];
   let startOfTheMonth = firstDay;
-  for (let d = 0; d < dayObjContainer.length + firstDay; d++) {
+  for (let d = 0; d <= dayObjContainer.length + firstDay; d++) {
     const divNode = document.createElement("div");
     divNode.classList.add(`day`);
     calenderDays.appendChild(divNode);
@@ -137,60 +123,58 @@ function createDayUiContainers() {
       divNode.classList.add(`today`);
       divNode.classList.add(`selected`);
     }
+    divNode.onclick = selectADay;
 
     divArr.push(divNode);
   }
   return divArr;
 }
 
-// // -- do days of the month array
-// function selectDay(event) {
-//   //-- deselect the currenctly selected dayObj
-//   const currenctlySelectedDayNode = document.querySelector(".selected");
-
-//   if (currenctlySelectedDayNode !== null)
-//     currenctlySelectedDayNode.classList.remove("selected");
-
-//   //-- select day that has just been clicked
-//   const clickedDayNode = event.currentTarget;
-//   clickedDayNode.classList.add("selected");
-// }
-
 ///////////////////////////////////////////////////////////////////////
-
-//-- create schedule ui elements
-function createTask() {
-  const taskDescription = document.getElementById("create-task");
-  const taskTime = document.getElementById("taskTime");
-  const addBtn = document.getElementById("add");
-
-  taskDescription.placeholder = "write your task";
-
-  //-- add schedule
-  let scheduleForTheDay = getSelectedDaySchedule();
-
-  addBtn.addEventListener("click", function () {
-    let dayTask = createTaskObj(taskTime.value, taskDescription.value);
-    if (taskDescription.value !== "") {
-      scheduleForTheDay.push(dayTask);
-      console.log(scheduleForTheDay);
-      console.log(createDaysArray());
-      displaySchedule();
-      // refresh schedule for new tasks
-    } else {
-      console.log("working");
-      taskDescription.placeholder = "you forgot to write your task";
-    }
-  });
-}
-//-- push with id of the selected day(original selected is today)
-//
-
 //-- select a dayObj
 function getCurrentlySelectedDay() {
   // console.log(document.querySelector(".selected"));
   return document.querySelector(".selected");
 }
+
+function selectADay(event) {
+  let currentlySelectedDayNode = getCurrentlySelectedDay();
+  if (currentlySelectedDayNode != null) {
+    currentlySelectedDayNode.classList.remove("selected");
+  }
+
+  const clickedDayNode = event.currentTarget;
+  clickedDayNode.classList.add("selected");
+}
+
+//-- create schedule ui elements
+function createTask() {
+  const taskDescription = document.getElementById("create-task").value;
+  const taskTime = document.getElementById("taskTime").value;
+
+  //-- new task object
+
+  let newTask = {
+    time: taskTime,
+    description: taskDescription,
+  };
+
+  taskDescription.placeholder = "write your task";
+
+  //-- add schedule
+  if (taskDescription !== "" && taskTime !== "") {
+    let scheduleForTheDay = getSelectedDaySchedule();
+    console.log(scheduleForTheDay);
+    scheduleForTheDay.push(newTask);
+
+    // refresh schedule for new tasks
+  } else {
+    console.log("working");
+    taskDescription.placeholder = "you forgot to write your task";
+  }
+}
+const addBtn = document.getElementById("add");
+addBtn.addEventListener("click", createTask);
 
 //-- check which one is selected day
 function getSelectedDaySchedule() {
@@ -198,14 +182,16 @@ function getSelectedDaySchedule() {
   let selectedDayId = +currentlySelectedDayNode.innerText;
 
   //-- get the array of days with id and schedule
-  let scheduleOftheDay = createDaysArray()[selectedDayId - 1].tasks;
-  scheduleOftheDay = [1, 2, 4, 5, 6, 7, 8];
+  let scheduleOftheDay = daysAndMeetings[selectedDayId - 1].tasks;
 
   //-- no tasks?
   if (scheduleOftheDay.length == 0) {
     scheduleOftheDay = [];
+    daysAndMeetings[selectedDayId].tasks = scheduleOftheDay;
   }
 
+  console.log(scheduleOftheDay);
+  console.log(daysAndMeetings);
   return scheduleOftheDay;
 }
 
@@ -217,19 +203,6 @@ function displaySchedule() {
 
   //-- select container
   let taskList = document.getElementById("task-list");
-
-  //-- if empty schedule
-  if (taskList == undefined || taskList.length == 0) {
-    let taskDiv = document.createElement("div");
-    let descriptionDiv = document.createElement("p");
-    taskDiv.classList.add("task");
-    descriptionDiv.classList.add("task-description");
-
-    descriptionDiv.innerText = "There are no tasks for today";
-
-    taskList.appendChild(taskDiv);
-    taskDiv.appendChild(descriptionDiv);
-  }
 
   for (let task of schedule) {
     //-- create divs
@@ -255,11 +228,8 @@ function displaySchedule() {
 
 //-- add to the meeting object
 // let new
-
 window.onload = function () {
   setUiDate();
   createDayUiContainers();
   displaySchedule();
-  getSelectedDaySchedule();
-  createTask();
 };
